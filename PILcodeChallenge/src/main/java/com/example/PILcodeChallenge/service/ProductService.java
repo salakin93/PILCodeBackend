@@ -1,5 +1,6 @@
 package com.example.PILcodeChallenge.service;
 
+import com.example.PILcodeChallenge.exceptions.ProductNotFoundException;
 import com.example.PILcodeChallenge.models.Product;
 import com.example.PILcodeChallenge.repositories.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,7 +29,7 @@ public class ProductService {
      */
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + id));
+                .orElseThrow(ProductNotFoundException::new);
     }
 
     /**
@@ -36,7 +37,7 @@ public class ProductService {
      * @param Product The Product object to be created
      * @return The created Product
      */
-    public Product createCategory(Product Product) {
+    public Product createProduct(Product Product) {
         return productRepository.save(Product);
     }
 
@@ -47,7 +48,7 @@ public class ProductService {
      * @return The updated Product
      * @throws EntityNotFoundException if the Product with the given ID is not found
      */
-    public Product updateCategory(Long id, Product productDetails) {
+    public Product updateProduct(Long id, Product productDetails) {
         Product Product = getProductById(id);
         Product.setProduct_image(productDetails.getProduct_image());
         Product.setProduct_name(productDetails.getProduct_name());
@@ -60,8 +61,15 @@ public class ProductService {
      * @param id The ID of the Product to be deleted
      * @throws EntityNotFoundException if the Product with the given ID is not found
      */
-    public void deleteCategory(Long id) {
+    public void deleteProduct(Long id) {
         Product Product = getProductById(id);
         productRepository.delete(Product);
+    }
+
+    public List<Product> createProductFromList(List<Product> products) {
+        for (Product product : products) {
+            productRepository.save(product);
+        }
+        return products;
     }
 }

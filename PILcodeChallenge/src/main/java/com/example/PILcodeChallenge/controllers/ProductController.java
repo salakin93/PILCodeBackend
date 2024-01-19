@@ -30,7 +30,7 @@ public class ProductController {
      * @return ResponseEntity containing the retrieved Product and HttpStatus.OK
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getCategoryById(@PathVariable Long id) {
+    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
         Product Product = productService.getProductById(id);
         return new ResponseEntity<>(Product, HttpStatus.OK);
     }
@@ -41,9 +41,22 @@ public class ProductController {
      * @return ResponseEntity containing the created Product and HttpStatus.CREATED
      */
     @PostMapping
-    public ResponseEntity<Product> createCategory(@RequestBody Product Product) {
-        Product createdCategory = productService.createCategory(Product);
-        return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
+    public ResponseEntity<Product> createProduct(@RequestBody Product Product) {
+        Product createdProduct = productService.createProduct(Product);
+        return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
+    }
+
+    /**
+     * Create a new Product from a list.
+     * @param Products list The Product object to be created
+     * @return ResponseEntity containing the created Product and HttpStatus.CREATED
+     */
+    @PostMapping("/fromList")
+    public ResponseEntity<List<Product>> createProductFromList(@RequestBody List<Product> Products) {
+        for (Product product : Products) {
+            Product createdProduct = productService.createProduct(product);
+        }
+        return new ResponseEntity<>(Products, HttpStatus.OK);
     }
 
     /**
@@ -53,9 +66,9 @@ public class ProductController {
      * @return ResponseEntity containing the updated Product and HttpStatus.OK
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateCategory(@PathVariable Long id, @RequestBody Product Product) {
-        Product updatedCategory = productService.updateCategory(id, Product);
-        return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product Product) {
+        Product updatedProduct = productService.updateProduct(id, Product);
+        return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
 
     /**
@@ -64,8 +77,8 @@ public class ProductController {
      * @return ResponseEntity with HttpStatus.NO_CONTENT
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        productService.deleteCategory(id);
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
